@@ -8,6 +8,7 @@ use app\common\model\Comment;
 use think\facade\Request; 
 use think\Db;
 use think\facade\Session;
+use app\index\service\Art;
 
 class Index extends Base
 {
@@ -27,7 +28,7 @@ class Index extends Base
         if (isset($cateId)){
             $map[] = ['cate_id','=', $cateId];
             $res = ArtCate::get($cateId);
-            $artList = Db::table('zh_article')
+            $artList = Db::table('article')
                     ->where($map)
                     ->order('create_time','desc')->paginate(4); 
             $page = $artList->render();
@@ -36,7 +37,7 @@ class Index extends Base
           
         } else {
           $this->view->assign('cateName','全部文章');
-          $artList = Db::table('zh_article')
+          $artList = Db::table('article')
                     ->where($map)
                     ->order('create_time','desc')->paginate(4); 
           $page = $artList->render();
@@ -67,32 +68,14 @@ class Index extends Base
      {
         if (Request::isPost()){
             $data = Request::post();
-            $res = $this->validate($data, 'app\common\validate\Article');
-            if (true !== $res) {
-                echo '<script >alert("'.$res.'");</script>';
-                $this->error('发布失败，请检查！','index/index/insert');
-            } else {
-                //第一步：获取表单上传文件
-                //第二步：使用验证规则，移动到框架指定目录
-                //第三步：成功上传后，获取上传信息
-                $file = Request::file('title_img');
-                $info = $file -> validate([
-                    'size'=>5000000000, 
-                    'ext'=>'jpeg,jpg,png,gif' 
-                ]) -> move('uploads/');
-                if ($info) {
-                    $data['title_img'] = $info->getSaveName();
-
-                } else {
-                    $this->error($file->getError(),'index/index/insert');
-                }
-                if(Article::create($data)){
+            $art = new Art;
+                if($art->art_save($data)){
                     $this->success('文章发布成功','index/index');
-                } else {
-                    $this->error('文章发布失败','index/index/insert');
-                }             
-            }
-        } else {
+            } else {
+            $this->error('文章发布失败','index/index/insert');
+            }             
+        }
+         else {
             $this->error('请求类型错误');
         }
      }
@@ -125,12 +108,12 @@ class Index extends Base
         $map[] = ['user_id','=', $art['user_id']];
         $map[] = ['article_id','=', $art['id']];
         $map[] = ['session_id','=', $session_id];
-        $result = Db::table('zh_user_fav')->where($map)->find();
+        $result = Db::table('user_fav')->where($map)->find();
         if(empty($result))
         {
             $result = ['session_id'=>'',];
         }
-        $like = Db::table('zh_user_like')->where($map)->find();
+        $like = Db::table('user_like')->where($map)->find();
         if(empty($like))
         {
             $like = ['session_id'=>'',];
@@ -159,10 +142,10 @@ class Index extends Base
         $map[] = ['article_id','=', $data['article_id']];
         $map[] = ['session_id','=', $data['session_id']];
 
-        $fav=Db::table('zh_user_fav')->where($map)->find();
+        $fav=Db::table('user_fav')->where($map)->find();
         if (is_null($fav)) {
 
-            Db::table('zh_user_fav')
+            Db::table('user_fav')
             ->data([
                 'user_id'=>$data['user_id'],
                 'article_id'=>$data['article_id'],
@@ -171,7 +154,7 @@ class Index extends Base
             return ['status'=>1, 'message'=>'取消收藏'];
                   
         }else {
-            Db::table('zh_user_fav')->where($map)->delete();
+            Db::table('user_fav')->where($map)->delete();
             return ['status'=>0, 'message'=>'收藏'];      
         }
     }
@@ -192,9 +175,9 @@ class Index extends Base
         $map[] = ['session_id','=', $data['session_id']];
 
 
-        $like=Db::table('zh_user_like')->where($map)->find();
+        $like=Db::table('_user_like')->where($map)->find();
         if (is_null($like)) {
-            Db::table('zh_user_like')
+            Db::table('user_like')
             ->data([
                 'user_id'=>$data['user_id'],
                 'article_id'=>$data['article_id'],
@@ -204,7 +187,7 @@ class Index extends Base
             return ['status'=>1, 'message'=>'取消赞'];
                   
         }else {
-            Db::table('zh_user_like')->where($map)->delete();
+            Db::table('user_like')->where($map)->delete();
             return ['status'=>0, 'message'=>'赞'];      
         }
     }

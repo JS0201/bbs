@@ -40,7 +40,9 @@
               alert(data.message);
               window.location.href = "{:url('index/index')}";
             break;
-            case 0:  
+            case 0:
+              alert(data.message);
+              window.location.back();
             case -1:
               alert(data.message);
               window.location.back();

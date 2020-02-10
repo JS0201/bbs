@@ -6,5 +6,5 @@ use think\Model;
 class Article extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'zh_article';
+	protected $table = 'article';
 } 

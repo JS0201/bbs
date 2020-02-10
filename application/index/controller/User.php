@@ -6,27 +6,15 @@ use app\common\model\User as UserModel;
 use app\common\validate\User as UserValidate; 
 use think\facade\Request; 
 use think\facade\Session;
-use think\facade\Hook;
-use think\Config;
+use app\index\service\Member;
 
 class User extends Base 
-{
+{	
 	//注册页面
 	public function register()
 	{
-		//检测是否允许注册
-		// $this->is_reg();
-
-		// $data = [];
-		// $params = Hook::listen('registerInit',$data);
-		// $a=$params[0];
-		// if($a['reg_status']===0){
-  //           $this->error($a['reg_error'],'register');
- 		
-		// $this->assign('title','用户注册');
-		// return $this->fetch();
-	// }
-	echo '123';
+		$this->assign('title','用户注册');
+		return $this->fetch();
 }
 
 	//处理注册信息
@@ -38,17 +26,12 @@ class User extends Base
 			$res=$this->validate($data,$rule);
 		  	if (true !== $res){
 		  		return ['status'=> -1, 'message'=>$res];
-		  	}else { 
-		  		if($user=UserModel::create($data)){
-		  			$courentUser = UserModel::get($user->id);
-		  			Session::set('user_id',$courentUser->id);
-		  			Session::set('user_name',$courentUser->name);
-		  			Session::set('is_admin',$courentUser->is_admin);
-
-					return ['status'=>1, 'message'=>'注册成功！'];
-				} else {
-					return ['status'=>0, 'message'=>'注册失败！'];			
-				}
+		  	}
+		  	$mem = new Member;
+		  	if($mem->mem_insert($data)){
+				return ['status'=>1, 'message'=>'注册成功！'];
+			} else {
+				return ['status'=>0, 'message'=>'注册失败！'];			
 			}			 
 		}else{
 			$this->error('请求类型错误','register');
@@ -58,40 +41,40 @@ class User extends Base
 	//登陆界面
 	public function login()
 	{
-			$this->logined();
+		$this->logined();
 		return $this->view->fetch('login',['title'=>'用户登录']);
 	}
+
 
 	//用户登录
 	public function loginCheck()
 	{		
 		
-		if(Request::isAjax()){
+		if(Request::isAjax())
+		{
 			$data = Request::post();
-			$rule = ['name|用户名'=>'require|chsAlphaNum','password|密码'=>'require|alphaNum'];
-			$res=$this->validate($data,$rule);
-		  	if (true !== $res){  
-		  		return ['status'=> -1, 'message'=>$res];
-		  	}else { 
-		  		$result = UserModel::get(
-		  			function($query) use ($data){
-		  			$query->where('name',$data['name'])
-		  				  ->where('password',sha1($data['password']));
-		  		}
-		  	);
-		  		if(null == $result){
-		  			return ['status'=>0, 'message'=>'用户名或密码不正确,请检查!'];
-				} else{
-					Session::set('user_id', $result->id);
-					Session::set('user_name', $result->name);
-					Session::set('is_admin', $result->is_admin);
-					return ['status'=>1, 'message'=>'登录成功！'];		
-				}
-			}			 
-		}else{
-			$this->error('请求类型错误','login');  //跳转到登录页面
-		}
-	}
+            $rule = ['name|用户名'=>'require|chsAlphaNum','password|密码'=>'require|alphaNum'];
+            $res=$this->validate($data,$rule);
+            if (true !== $res){  
+                return ['status'=> -1, 'message'=>$res];
+            }
+		  		$mem = new Member;
+		 		$a = $mem->mem_loginCheck($data);
+		  	switch($a)
+		  	{
+		  		case 1:
+		  		return ['status'=>1, 'message'=>'登录成功！'];
+		  		break;
+		  		case 0:
+		  		return ['status'=>0, 'message'=>'用户已被禁用！'];
+		  		break;
+		  		case -1:
+		  		return ['status'=>-1, 'message'=>'检查用户名密码！'];	
+		  		break;
+		  	}
+		}			 
+}
+
 
 	//退出登录
 	public function logout()

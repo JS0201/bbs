@@ -6,7 +6,7 @@ use think\Model;
 class Article extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'zh_article';
+	protected $table = 'article';
 	protected $autoWriteTimestamp = true;
 	protected $createTime = 'create_time';
 	protected $updateTime = 'update_time';
