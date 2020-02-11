@@ -19,11 +19,19 @@
       <input type="password" name="password" class="form-control" id="inputPassword4" placeholder="Password">
     </div>
   </div>
+  <div class="form-group">
+    <label for="inputPassword5" class="col-sm-2 control-label">验证码:</label>
+    <div class="col-sm-7">
+      <input type="captcha" name="captcha" class="form-control" id="inputPassword5" placeholder="captcha">
+    </div>
+    <div class="col-sm-3"><img height=35px width=208px src="{:url('User/verify')}" alt="captcha" id="captcha" /></div>
+  </div>
  <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="button" class="btn btn-primary" id="submit">登录</button>
     </div>
   </div>
+  
 </form>
 <script type="text/javascript">
   $(function(){
@@ -52,5 +60,12 @@
         }
       })
   })
+  })
+</script>
+<script type="text/javascript">
+  $(function(){
+    $("#captcha").click(function(event) {
+  this.src = "{:url('index/user/verify')}";
+})
   })
 </script>

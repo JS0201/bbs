@@ -1,7 +1,6 @@
-{extend name="public:base" /}
-{block name="body"}
+{layout name="public:layout" /}
 <div class="row">
-		<div class="col-md-8">
+		<div class="col-md-7 col-md-offset-1">
 		<div class="page-header">
   			<h2>{$title}</h2>
 		</div>
@@ -34,4 +33,3 @@
                 </div>
                 <button type="submit" class="btn btn-primary">提交</button>
             </form>
-{/block}

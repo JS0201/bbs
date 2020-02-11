@@ -1,5 +1,5 @@
 	</div>
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<div class="page-header"> <h2>热门浏览</h2> </div> 
 			<div class="list-group">
 				{volist name="hotArtList" id="art" key="key"}
@@ -8,7 +8,7 @@
 				{eq name="$art.id" value="$Request.param.id"}
 				active
 				{/eq}
-					">{:mb_substr($art.title,0,18)}>>><span class="badge">{$art.pv}</span></a>
+					">{:mb_substr($art.title,0,15)}>>><span class="badge">{$art.pv}</span></a>
 				{/volist}
 			</div>
 

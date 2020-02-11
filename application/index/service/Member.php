@@ -21,8 +21,8 @@ class Member extends Base
 		  Session::set('user_name',$courentUser->name);
 		  Session::set('is_admin',$courentUser->is_admin);	
 		  return 1;	
-		}	  			
-	} 
+		}
+	}
 	/*
         登录   
      */
@@ -58,3 +58,4 @@ class Member extends Base
         return substr(crypt($password, $salt),7);
     }
 }
+

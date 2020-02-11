@@ -9,6 +9,7 @@
 		<td>邮箱</td>
 		<td>手机号</td>
 		<td>注册时间</td>
+		<td>最后登录</td>
 		<td>身份</td>
 		<td>状态</td>
 		<td colspan="2">操作</td>
@@ -16,10 +17,11 @@
 	{volist name="userList" id="user" empty="$empty"}
 	<tr>
 		<td>{$user.id}</td>
-		<td>{$user.name}</td>
+		<td>{$user.name}<span style="color: #337AB7">（登录次数：{$user.login_num}）</span></td>
 		<td>{$user.email}</td>
 		<td>{$user.mobile}</td>
 		<td>{$user.create_time}</td>
+		<td>{$user.login_time|date='Y-m-d H:i:s'}</td>
 		<td>
 			{eq name="$user.is_admin" value="0"}
 		<span style="color:green">注册会员</span>
@@ -29,9 +31,9 @@
 		</td>
 		<td>
 		{eq name="$user.status" value="1"}
-		<span style="color:green">正常</span>
+		<span class="glyphicon glyphicon-ok-circle"></span>
 		{else/}
-		<span style="color:red">禁用</span>
+		<span class="glyphicon glyphicon-remove-circle"></span>
 		{/eq}
 		</td>
 		

@@ -1,7 +1,7 @@
 {extend name="public:base" /}
 {block name="body"}
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-7 col-md-offset-1">
 		<div class="page-header">
   			<h2>{$cateName}</h2>
 		</div>
@@ -22,5 +22,6 @@
             {/volist}
 
         <div class="text-center">{$page|raw}</div> 
+
 {/block}
 

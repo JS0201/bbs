@@ -7,6 +7,7 @@ use app\common\validate\User as UserValidate;
 use think\facade\Request; 
 use think\facade\Session;
 use app\index\service\Member;
+use think\captcha\Captcha;
 
 class User extends Base 
 {	
@@ -22,7 +23,7 @@ class User extends Base
 	{	
 		if(Request::isAjax()){
 			$data = Request::post(); 
-			$rule = 'app\common\validate\User'; 
+			$rule = 'app\common\validate\Reginster'; 
 			$res=$this->validate($data,$rule);
 		  	if (true !== $res){
 		  		return ['status'=> -1, 'message'=>$res];
@@ -37,7 +38,7 @@ class User extends Base
 			$this->error('请求类型错误','register');
 		}
 	}
-
+	
 	//登陆界面
 	public function login()
 	{
@@ -45,6 +46,19 @@ class User extends Base
 		return $this->view->fetch('login',['title'=>'用户登录']);
 	}
 
+	//验证码
+	public function verify()
+    {	
+    	$config =    [
+    	'fontSize'    =>    30,    
+    	'length'      =>    5,   
+   	 	'fontttf' 	  =>    '6.ttf',
+   	 	'useCurve'	  =>	false,
+   	 	'bg'=>[244, 244, 244],
+	];
+        $captcha = new Captcha($config);
+        return $captcha->entry();    
+    }
 
 	//用户登录
 	public function loginCheck()
@@ -53,14 +67,13 @@ class User extends Base
 		if(Request::isAjax())
 		{
 			$data = Request::post();
-            $rule = ['name|用户名'=>'require|chsAlphaNum','password|密码'=>'require|alphaNum'];
+            $rule = 'app\common\validate\Login';
             $res=$this->validate($data,$rule);
             if (true !== $res){  
                 return ['status'=> -1, 'message'=>$res];
             }
 		  		$mem = new Member;
-		 		$a = $mem->mem_loginCheck($data);
-		  	switch($a)
+		  	switch($mem->mem_loginCheck($data))
 		  	{
 		  		case 1:
 		  		return ['status'=>1, 'message'=>'登录成功！'];
