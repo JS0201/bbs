@@ -1,0 +1,115 @@
+{layout name="public/layout" /}
+
+<div class="container">
+    <div class="row">
+    <!-- 左侧 -->
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">头像
+                <a href="{:url('user/memedite')}" style="position: relative;left:35%" >
+                <input name="编辑" type="button" value="编辑个人信息" class="btn btn-info"/>
+                </a>
+                </div>
+                <div class="panel-body" align="center">
+                    <img src="/uploads/{$data.image}" class="img-responsive img-rounded img-thumbnail" alt="Me"  style="width: 141px;height: 141px;left:0;top: 0;border-radius: 10%;">
+                    <p class="text-center text-primary">昵称：{$data.nickname}</p>
+                </div>
+            
+            </div>
+        </div>
+
+        <!-- 右侧 -->
+        <div class="col-sm-9">
+            <div class="jumbotron">
+                <p class="text-left small">
+                {$data.profile}
+                </p>
+            </div>
+
+            <div class="panel-group" id="accoradion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <a href="#collapseOne" data-toggle="collapse" data-parent="#accoradion">我的文章</a>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <table class="table table-striped table-hover text-center">
+                                    <tr>
+                                        <td>序号</td>
+                                        <td>标题</td>
+                                        <td>栏目</td>
+                                
+                                        <td>阅读量</td>
+                                        <td>创建时间</td>
+                                        <td colspan="2">操作</td>
+                                    </tr>
+                                    {volist name="artList" id="art" empty="$empty"}
+                                    <tr>
+                                        <td>{$art.id}</td>
+                                        <td class="text-left"><a href="http://www.bbs.com/index.php/index/index/detail/id/{$art.id}.html">{$art.title}</a></td>
+                                        <td>{$art.cate_id|getCateName}</td>
+                                
+                                
+                                        <td>{$art.pv}</td>
+                                        <td>{$art.create_time}</td>
+                                        
+                                        <td><a href="{:url('admin/article/artEdit',['id'=>$art.id])}">编辑</a></td>
+                                        <td><a href="" onclick="dele({$art.id});return false;">删除</a></td>
+                                    </tr>
+                                    {/volist}
+                                </table>
+                                <div class="text-center">{$artList|raw}</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <a href="#collapseTwo" data-toggle="collapse" data-parent="#accoradion">我的评论</a>
+                        </div>
+
+
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <table class="table table-striped table-hover text-center">
+                                    <tr>
+                                        <td>序号</td>
+                                        <td>评论内容</td>
+                                        <td>评论时间</td>
+                                        <td>操作</td>
+                                    </tr>
+                                    {volist name="comList" id="com" empty="$em"}
+                                    <tr>
+                                        <td>{$com.id}</td>
+                                        <td class="text-left"><a href="http://www.bbs.com/index.php/index/index/detail/id/{$com.article_id}.html">{$com.content}</a></td>
+                                        <td>{$com.create_time}</td>
+                                        <td><a href="" onclick="delet({$com.id});return false;">删除</a></td>
+                                    </tr>
+                                    {/volist}
+                                </table>
+                                <div class="text-center">{$comList|raw}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function dele(id)
+    {
+        if(confirm('您真的要删除吗?') == true){
+            window.location.href = "{:url('admin/article/doDelete')}"+"?id="+id;          
+        }
+    }
+     function delet(id)
+    {
+        if(confirm('您真的要删除吗?') == true){
+            window.location.href = "{:url('index/user/doDelete')}"+"?id="+id;          
+        }
+    }
+</script>

@@ -6,7 +6,22 @@
 		<div class="page-header">
   			<h2>{$title|default="用户注册"}</h2>
 		</div>
-		<form class="form-horizontal" method="post" id="re">
+		<form class="form-horizontal" action="{:url('index/User/insert')}" enctype="multipart/form-data" method="post">
+
+    <div class="form-group">
+    <label for="avatar_img" class="col-sm-2 control-label">头像:</label>
+    <div>
+    <div style="position: relative;border: 5px solid #CECECEFF;width: 150px;height:150px;margin: 0px 200px;border-radius: 13%;">
+    <img src="\uploads\default.jpg" alt="选择并上传头像" id="avatar_img"
+       style="width: 141px;height: 141px;left:0;top: 0;border-radius: 10%;"/>
+    <input type="file" id="avatar_file" name="image"
+         style="width: 100%;height:100%;opacity: 0;position: absolute;left:0;top: 0;"/>
+    </div>
+     <label for="avatar_file" style="position: absolute;color:#337AB7;top:43%;left: 37%">选择并上传头像</label>
+  </div>
+  </div>
+ 
+
   <div class="form-group">
     <label for="inputEmail1" class="col-sm-2 control-label">用户名:</label>
     <div class="col-sm-10">
@@ -44,7 +59,7 @@
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="button" class="btn btn-primary" id="register">注册</button>
+      <button type="submit" class="btn btn-primary" id="register">注册</button>
     </div>
   </div>
 </form>
@@ -77,4 +92,20 @@
   })
   })
 </script>	 
+
+<script>
+    // 头像预览
+    $("#avatar_file").change(function () {
+        // 获取上传文件对象
+        var file = $(this)[0].files[0];
+        // 读取文件URL
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        // 阅读文件完成后触发的事件
+        reader.onload = function () {
+            // 读取的URL结果：this.result
+            $("#avatar_img").attr("src", this.result);
+        }
+    });
+</script>
 {/block}

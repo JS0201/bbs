@@ -5,6 +5,7 @@ use app\admin\common\controller\Base;
 use app\admin\common\model\User as UserModel;
 use think\facade\Request;
 use think\facade\Session;
+use app\index\service\Member;
 
 class User extends Base 
 {
@@ -19,20 +20,9 @@ class User extends Base
 	public function checkLogin()
 	{
 		$data = Request::param();
-
-		$map[] = ['name','=',$data['name']];
-		$map[] = ['password','=',sha1($data['password'])];
-		$map[] = ['is_admin','=',1];
-		$result = UserModel::where($map)->find();
-		if($result){
-			Session::set('user_id',$result['id']);
-			Session::set('user_name',$result['name']);
-			Session::set('is_admin',$result['is_admin']);			
-			$this->success('登录成功','admin/user/userList');
+		$mem = new Member;
+		$mem->mem_loginCheck_admin($data);
 		}
-
-		$this->error('该功能只允许管理员使用！');
-	}
 
 	//退出登录
 	public function logout()
