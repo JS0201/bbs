@@ -6,7 +6,7 @@ use think\Model;
 class Comment extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'user_comments';
+	protected $table = 'bbs_user_comments';
 	protected $autoWriteTimestamp = true;
 	protected $createTime = 'create_time';
 	protected $updateTime = 'update_time';

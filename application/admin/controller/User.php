@@ -61,15 +61,17 @@ class User extends Base
 	//执行用户编辑操作
 	public function doEdit()
 	{
-		$data = Request::param();
+		$data = Request::post();
 		$id = $data['id']; 	
 		$userInfo = UserModel::where('id',$id)->find();
-		if ($data['password'] == $userInfo['password']) {
+		$mem = new Member;
+		$password = $mem->mem_update_password($data['password'],$userInfo['encrypt']);
+		if($password == $userInfo['password']){
 			unset($data['password']); 
 		} else {
-			$data['password'] = sha1($data['password']);
+			$data['password'] = $password;
 		}
-		if(UserModel::where('id',$data['id'])->data($data)->update()){
+		if(UserModel::where('id',$data['id'])->update($data)){
 			return $this->success('更新成功','userList');
 		}
 		$this->error('没有更新或更新失败');

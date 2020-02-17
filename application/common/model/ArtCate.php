@@ -6,7 +6,7 @@ use think\Model;
 class ArtCate extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'article_category';
+	protected $table = 'bbs_article_category';
 	protected $autoWriteTimestamp = true; 
 	protected $createTime = 'create_time'; 
 	protected $updateTime = 'update_time'; 

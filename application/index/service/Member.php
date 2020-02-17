@@ -5,6 +5,8 @@ use app\common\controller\Base;
 use think\facade\Session;
 use app\common\model\User as UserModel; 
 use think\facade\Request; 
+use app\common\model\RechangeCheck;
+use app\admin\common\model\Finance; 
 
 class Member extends Base
 {
@@ -13,7 +15,7 @@ class Member extends Base
      */
     public function mem_insert($data)
 	{	
-        $data['encrypt'] = bin2hex(random_bytes(3));
+        $data['encrypt'] = random(6);
         $data['password'] = $this->create_password($data['password'],$data['encrypt']);
          $file = Request::file('image');
                 $info = $file -> validate([
@@ -29,7 +31,9 @@ class Member extends Base
 		if($user=UserModel::create($data))
 		{
 		  $courentUser = UserModel::get($user->id);
-		  Session::set('user_id',$courentUser->id);
+          $moneyData = array('uid' => $courentUser->id, 'grade' => 1, 'agency_level' => 1,'money' =>0, 'time' => time());
+          $money_id = Finance::create($moneyData);
+          Session::set('user_id',$courentUser->id);
 		  Session::set('user_name',$courentUser->name);
 		  Session::set('is_admin',$courentUser->is_admin);	
 		  return 1;	
@@ -86,9 +90,18 @@ class Member extends Base
             $this->success('登录成功','admin/user/userList');
         }else{
             $this->success('登录失败，请重试！','admin/user/login');
-        }
+        } 
         
     }
+
+    /*
+        编辑用户信息（密码）
+     */
+    public function mem_update_password($data,$encrypt)
+    {
+        return $this->create_password($data,$encrypt);
+    }    
+
     /*
         密码加密
      */
@@ -98,31 +111,47 @@ class Member extends Base
     }
 
         /*
-        注册   
+        个人信息修改 
      */
     public function mem_edite($data)
     {   
          $file = Request::file('image');
-                $info = $file -> validate([
+         if ($file)
+         {
+            $info = $file -> validate([
                     'size'=>5000000000, 
                     'ext'=>'jpeg,jpg,png,gif' 
                 ]) -> move('uploads/');
-                if ($info) {
+                if ($info) 
+                {
                     $data['image'] = $info->getSaveName();
 
                 } else {
                     $this->error($file->getError(),'index/User/memEdite');
                 }
+         }
                 $user = new UserModel;
-                $param = [
-                    'id'         =>      $data['id'],      
-                    'image'      =>      $data['image'],
-                    'nickname'   =>      $data['nickname'],
-                    'profile'    =>      $data['profile'],
-                    'email'      =>      $data['email'],
-                    'mobile'     =>      $data['mobile'],
-                ];
-                $result = $user->save($param,['id','=',$param['id']]);
+                $result = $user->save($data,['id','=',$data['id']]);
+        if($result)
+        {
+          return 1; 
+        }
+    }
+    public function mem_Charge($data)
+    {   
+        $data['money'] = $data['amount'];
+        $rule = ['money|总额' => 'require|Num'];
+        $res=$this->validate($data,$rule);
+        if (!true == $res){
+            $this->error($res,'memMoney');
+        }
+        $mem = new RechangeCheck;
+        $param = [
+            'uid'     =>      Session::get('user_id'),
+            'money'   =>      $data['money'],
+            'type'    =>      1,
+    ];
+        $result = $mem->save($param);
         if($result)
         {
           return 1; 

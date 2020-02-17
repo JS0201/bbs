@@ -42,14 +42,15 @@ class Article extends Base
      {   
         $data = Request::param();
         $file = Request::file('title_img'); 
-        $info = $file -> validate([
+        if($file)
+        {
+            $info = $file -> validate([
             'size'=>5000000000,  
             'ext'=>'jpeg,jpg,png,gif' 
         ]) -> move('uploads/'); 
-        if ($info) {
+        }
+        if(!empty($info)) {
             $data['title_img'] = $info->getSaveName();
-        } else {
-            $this->error($file->getError());
         }
         if(ArtModel::update($data)){ 
             $this->success('文章更新成功','artList');

@@ -1,0 +1,81 @@
+{extend name="public:lore" /}
+
+{block name="body"}
+  <div class="row">
+    <div class="col-md-8" style="position: absolute;top: 100px;">
+
+    <form class="form-horizontal" action="{:url('Member/memEditeCheck')}" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="id" value="{$data.id}">
+    <div class="form-group">
+    <label for="avatar_img" class="col-sm-2 control-label">头像:</label>
+    <div>
+    <div style="position: relative;border: 5px solid #CECECEFF;width: 150px;height:150px;margin: 0px 200px;border-radius: 13%;">
+    <img src="\uploads\{$data.image}" alt="选择并上传头像" id="avatar_img"
+       style="width: 141px;height: 141px;left:0;top: 0;border-radius: 10%;"/>
+    <input type="file" id="avatar_file" name="image"
+         style="width: 100%;height:100%;opacity: 0;position: absolute;left:0;top: 0;"/>
+    </div>
+     <label for="avatar_file" style="position: absolute;color:#337AB7;top:43%;left: 37%">选择并上传头像</label>
+  </div>
+  </div>
+ 
+  <div class="form-group">
+    <label for="profile" class="col-sm-2 control-label">简介:</label>
+    <div class="col-sm-10">
+      <textarea id="profile"  class="form-control" name="profile" style="min-height: 200px;">{$data.profile}</textarea> 
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="nikename" class="col-sm-2 control-label">昵称:</label>
+    <div class="col-sm-10">
+      <input type="text" name="nickname" class="form-control" id="nikename" placeholder="{$data.nickname}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputEmail2" class="col-sm-2 control-label">邮箱:</label>
+    <div class="col-sm-10">
+      <input type="text" name="email" class="form-control" id="inputEmail2" placeholder="{$data.email}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">手机:</label>
+    <div class="col-sm-10">
+      <input type="text" name="mobile" class="form-control" id="inputEmail3" placeholder="{$data.mobile}">
+    </div>
+  </div>
+
+  <row>
+  <div class="form-group">
+    <div class="col-sm-2 col-sm-offset-2">
+      <button type="submit" class="btn btn-primary" id="register">提交</button>
+    </div>
+    <div class="col-sm-2">
+      <a href="/index/member/show/user_id/{$data.id}">
+      <button type="button" class="btn btn-primary" id="register">返回</button>
+    </a>
+    </div>
+  </div>
+</row>
+</form>
+</div>
+</div>
+
+<script>
+    // 头像预览
+    $("#avatar_file").change(function () {
+        // 获取上传文件对象
+        var file = $(this)[0].files[0];
+        // 读取文件URL
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        // 阅读文件完成后触发的事件
+        reader.onload = function () {
+            // 读取的URL结果：this.result
+            $("#avatar_img").attr("src", this.result);
+        }
+    });
+</script>
+{/block}

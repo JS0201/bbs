@@ -6,5 +6,5 @@ use think\Model;
 class Cate extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'article_category';
+	protected $table = 'bbs_article_category';
 } 

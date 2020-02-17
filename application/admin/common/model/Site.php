@@ -6,5 +6,5 @@ use think\Model;
 class Site extends Model 
 {
 	protected $pk = 'id';
-	protected $table = 'site';
+	protected $table = 'bbs_site';
 } 

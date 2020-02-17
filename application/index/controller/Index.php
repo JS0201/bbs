@@ -28,7 +28,7 @@ class Index extends Base
         if (isset($cateId)){
             $map[] = ['cate_id','=', $cateId];
             $res = ArtCate::get($cateId);
-            $artList = Db::table('article')
+            $artList = Db::table('bbs_article')
                     ->where($map)
                     ->order('create_time','desc')->paginate(4); 
             $page = $artList->render();
@@ -37,7 +37,7 @@ class Index extends Base
           
         } else {
           $this->view->assign('cateName','全部文章');
-          $artList = Db::table('article')
+          $artList = Db::table('bbs_article')
                     ->where($map)
                     ->order('create_time','desc')->paginate(4); 
           $page = $artList->render();
@@ -108,12 +108,12 @@ class Index extends Base
         $map[] = ['user_id','=', $art['user_id']];
         $map[] = ['article_id','=', $art['id']];
         $map[] = ['session_id','=', $session_id];
-        $result = Db::table('user_fav')->where($map)->find();
+        $result = Db::table('bbs_user_fav')->where($map)->find();
         if(empty($result))
         {
             $result = ['session_id'=>'',];
         }
-        $like = Db::table('user_like')->where($map)->find();
+        $like = Db::table('bbs_user_like')->where($map)->find();
         if(empty($like))
         {
             $like = ['session_id'=>'',];
@@ -145,7 +145,7 @@ class Index extends Base
         $fav=Db::table('user_fav')->where($map)->find();
         if (is_null($fav)) {
 
-            Db::table('user_fav')
+            Db::table('bbs_user_fav')
             ->data([
                 'user_id'=>$data['user_id'],
                 'article_id'=>$data['article_id'],
@@ -177,7 +177,7 @@ class Index extends Base
 
         $like=Db::table('_user_like')->where($map)->find();
         if (is_null($like)) {
-            Db::table('user_like')
+            Db::table('bbs_user_like')
             ->data([
                 'user_id'=>$data['user_id'],
                 'article_id'=>$data['article_id'],

@@ -1,0 +1,85 @@
+{extend name="public/book_base" /}
+{block name="body"}
+<div class="main-content">
+
+	<div class="main-content-inner">
+
+		<div class="page-content">
+
+			<div class="row">
+				<div class="col-xs-12">
+
+
+                    <div class="border clearfix">
+
+                        <a href="{:url('add')}" class="btn btn-warning btn-sm glyphicon glyphicon-plus" style="border-radius: 6px;width: 80px;"><i class="icon-plus bigger-120"></i> 添加</a>
+                        &nbsp;
+                        <a href="{:url('delete')}" data-ajax="id" class="btn btn-danger btn-sm glyphicon glyphicon-trash" style="border-radius: 6px;width: 80px;"><i class="icon-plus bigger-120"></i> 删除</a>
+                    </div></br>
+
+    <!--
+        <div class="tree" style="display:inline-block;">
+         <i class="icon-plus"></i>
+        </div>
+
+        预留异步加载
+    -->
+					<div class="table-responsive">
+					  <table id="sample-table" class="table table-striped table-bordered table-hover">
+   <thead>
+    <tr>
+     <th width="50"> <label> <input type="checkbox" class="ace " id="check-all" /> <span class="lbl"></span> </label> </th>
+     <th width="50">排序</th>
+     <th width="50">ID</th>
+     <th>分类名称</th>
+     <th width="100">楼层</th>
+     <th width="100">状态</th>
+     <th width="350">操作</th>
+    </tr>
+   </thead>
+   <tbody>
+   {volist name="list" id="foo"}
+    <tr>
+     <td> <label class="check-option"> <input type="checkbox" class="ace"  value="{$foo['id']}" /> <span class="lbl"></span> </label> </td>
+     <td>{$foo['sort']}</td>
+     <td>{$foo['id']}</td>
+     <td class="left">{$foo['name']}</td>
+     <td><i class="{eq name="$foo['is_floor']" value="1"}glyphicon glyphicon-ok" style="color:red"{/eq}{eq  name="$foo['is_floor']" value="0"} glyphicon glyphicon-remove" style="color:green"{/eq}></i></td>
+     <td><i class="{if condition="$foo['status'] = 1"}glyphicon glyphicon-ok" style="color:red"{else/}glyphicon glyphicon-remove" style="color:green"{/if}></i></td>
+     <td>
+      <div>
+       <a class="blue" href="{:url('content/index/index',['id'=>$foo['id']])}"> <i class="icon-eye-open bigger-130"></i> 预览</a>
+          &nbsp;
+          <a class="pink" href="{:url('goods/admin/index',['catid'=>$foo['id']])}"> <i class="icon-book bigger-130"></i> 商品</a>
+          &nbsp;
+       <a class="orange" href="{:url('add',['parent_id'=>$foo['id']])}"> <i class="icon-plus-sign bigger-130"></i> 添加子分类</a>
+          &nbsp;
+       <a class="green" href="{:url('edit',['id'=>$foo['id']])}"> <i class="icon-pencil bigger-130"></i> 编辑</a>
+          &nbsp;
+       <a class="red" data-confirm="是否确认删除，子分类同时也会删除？" href="{:url('delete',['id'=>$foo['id']])}"> <i class="icon-trash bigger-130"></i> 删除</a>
+      </div>
+
+
+     </td>
+    </tr>
+   {/volist}
+
+   </tbody>
+  </table>
+					</div>
+
+				</div>
+
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+
+</div>
+
+{/block}
+

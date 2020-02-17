@@ -5,6 +5,7 @@ use think\Facade\Session;
 use think\facade\Request;
 use app\common\model\ArtCate; 
 use app\common\model\Article;
+use app\common\model\User;
 use app\admin\common\model\Site;  
 
 class Base extends Controller
@@ -14,10 +15,12 @@ class Base extends Controller
     {
         //检测站点是否已关闭
         $this->is_open();
-        //显示分类导航
+        //论坛导航
         $this->showNav();
         //热门浏览
         $this->getHotArt();
+        //书店导航
+        $this->showBookNav();
     }
 
     //检查是否已登录
@@ -36,14 +39,25 @@ class Base extends Controller
         }
     }
 
-    //显示分类导航
+    //论坛导航
     protected function showNav()
     {
         $cateList = ArtCate::all(function($query){
             $query->where('status',1)->order('sort','asc');
         });
+        $mem = User::get(function($query){
+            $query->where('id',session::get('user_id'));
+        });
+        $this->view->assign('mem', $mem);
         $this->view->assign('cateList', $cateList);
         
+    }
+
+    //书店导航
+    protected function showBookNav()
+    {
+        $uid = Session::get('user_id');
+        $this->view->assign('uid', $uid);
     }
 
 
