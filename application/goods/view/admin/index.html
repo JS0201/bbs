@@ -1,0 +1,110 @@
+{extend name="public:book_base" /}
+
+{block name="body"}
+<div class="main-content">
+
+	<div class="main-content-inner">
+
+		<div class="page-content">
+
+			<div class="row">
+				<div class="col-xs-12">
+
+               <div class="border clearfix">
+
+                        
+
+                    </div>
+
+                    <div class="border clearfix">
+                        <div class="search clearfix">
+                            <form class="form-inline">
+                                <input type="hidden" value="{:input('catid')}" name="catid">
+                                  
+
+                                <div class="form-group">
+                                <span class="input-group-btn" style="width:100%;">
+                                    <button type="submit" class="btn btn-purple btn-sm">
+                                        搜索
+                                        <i class="icon-search icon-on-right bigger-110"></i>
+                                    </button>
+                                 </span>
+                                </div>
+                            </form>
+                        </div>
+                        <a href="{:url('delete')}" data-ajax="id" class="btn btn-danger btn-sm "><i class="icon-trash bigger-120"></i> 删除</a>
+                    </div>
+					<div class="table-responsive">
+					  <table id="sample-table" class="table table-striped table-bordered table-hover">
+   <thead>
+    <tr>
+     <th width="50"> <label> <input type="checkbox" class="ace " id="check-all" /> <span class="lbl"></span> </label> </th>
+     <th width="50">排序</th>
+     <th width="50">ID</th>
+     <th width="100">缩略图</th>
+     <th>商品名称</th>
+     <th width="300">品牌&分类</th>
+     <th width="150">价格</th>
+     <th width="100">库存</th>
+     <th width="100">上架</th>
+     <th width="200">操作</th>
+    </tr>
+   </thead>
+   <tbody>
+   {volist name="list" id="foo"}
+    <tr>
+     <td> <label class="check-option"> <input type="checkbox" class="ace"  value="{$foo['id']}" /> <span class="lbl"></span> </label> </td>
+     <td>{$foo['sort']}</td>
+     <td>{$foo['id']}</td>
+     <td><img src="{if condition="$foo['imgs']"}/uploads/{$foo['imgs']}{else/}aa{/if}" width="50"></td>
+     <td class="left">{$foo['name']}</td>
+     <td class="left">
+         <p>品牌：{$foo['brand_name']}</p>
+         <p>分类：{$foo['cate_name']}</p>
+     </td>
+     <td><span style="text-decoration:line-through;color: #A0A0A0FF">原价：￥{$foo['max_price']}</span><br><span style="color: red">现价：￥{$foo['min_price']}</span></td>
+     <td>{$foo['warn_number']}</td>
+     <td><i class="{if condition="$foo['status'] eq 1"}glyphicon glyphicon-ok{else/}glyphicon glyphicon-remove{/if} bigger-120" 
+     	style="color: {if condition="$foo['status'] eq 1"}red{else/}green{/if}"></i></td>
+     <td>
+
+      <div>
+       
+       <a class="green" href="{:url('edit',['id'=>$foo['id']])}"> <i class="icon-pencil bigger-130"></i> 编辑</a>
+          &nbsp;
+       <a class="red" data-confirm="是否确认删除？" href="{:url('delete',['id'=>$foo['id'],'label'=>input('label')])}"> <i class="icon-trash bigger-130"></i> 删除</a>
+      </div>
+
+
+     </td>
+    </tr>
+   {/volist}
+
+   </tbody>
+  </table>
+					</div>
+
+					    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info">每页显示条，总条数据</div>
+                        </div>
+
+                       
+    
+                    </div>
+				</div>
+
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+
+</div>
+
+
+{/block}
+

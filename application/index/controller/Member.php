@@ -9,6 +9,7 @@ use app\admin\common\model\Finance;
 use think\facade\Request; 
 use think\facade\Session;
 use app\index\service\Member as Mem;
+use app\index\service\Address;
 use think\Db;
 
 class Member extends Base
@@ -116,8 +117,73 @@ class Member extends Base
 		$this->assign('title','充值明细');
 		return $this->fetch();
 	}
+ 
+ public function addressShow()
+ {
+ 	$uid = Request::session('user_id');
+ 	$address = new Address;
+ 	if(Request::isajax())
+ 	{
+ 		$aid = input('post.aid');
+ 		$ischeck = input('post.ischeck');
+ 		if($ischeck == 0)
+ 		{
+ 			$ischeck = 1;
+ 		}else{
+ 			$ischeck =0;
+ 		}
+ 		$result = $address->isCheck($aid, $ischeck,$uid);
+ 		return ['message'=>$result];
+ 	}
+    	
+    	$data['mid']=$uid;
+    	$result = $address->getAll($data);
+    	$this->assign('list',$result);
+        $this->assign('title','收货地址');
+        return $this->fetch();
+    }
 
+	//获取省和直辖市与添加
+    public function addaddress(){
+    	$address = new Address;
+    	if(Request::post())
+    	{
+    		$id = input('post.id');
+    		$uid = Request::session('user_id');
+    		$result = $address->add($uid, input('post.'));
+            if($result != 1) {
+                $this->success($result);
+            }else{
+            	return $this->success('添加成功！');
+            }
+        }
+        $parent_id['parent_id'] = 0;
+        $region = $address->getOne($parent_id);
+        $this->assign('region',$region);
+        $this->assign('title','添加收货地址');
+        return $this->fetch();
+    }
 
+	//获取地级市
+	public function get_citys(){
+		$parent_id['parent_id'] = input('post.pro_id');
+		$region = Db::table('bbs_region')->where($parent_id)->select();
+		$opt = '<option>--请选择市--</option>';
+		foreach($region as $key=>$val){
+		    $opt .= "<option value='{$val['region_id']}'>{$val['region_name']}</option>";
+		 }
+		 echo json_encode($opt);
+	}
+	//获取地级县
+	public function get_district(){
+		$parent_id['parent_id'] = input('post.pro_id');
+		$region = Db::table('bbs_region')->where($parent_id)->select();
+		$opt = '<option>--请选择区县--</option>';
+		foreach($region as $key=>$val){
+		    $opt .= "<option value='{$val['region_id']}'>{$val['region_name']}</option>";
+		 }
+		 echo json_encode($opt);
+	}
 
 
 }

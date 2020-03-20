@@ -1,0 +1,73 @@
+<script src='/ace/assets/js/jquery-2.1.4.min.js'></script>
+<script>
+    $(function(){
+        id = 0;
+        $('.spec-add').on('click',function () {
+            if(id==0) {
+                id = 1;
+                idname = id + '_img';
+            }else{
+                id ++;
+                idname = id + '_img';
+            }
+            var html='<tr><td><input style="margin-left:30%;" class="col-xs-5 col-sm-5" name="value[]" type="text"></td>' +
+                            '<td style="width:350px;"><div style="width: 100%;"><input class="col-xs-10 col-sm-10" id= ' +idname+ ' name="img[]" value="" tabindex="0" num="1" input=' +idname+ ' type="text"><button  style="padding:2px 0 1px 0;" data-id=' +idname+ ' class="btn btn-default col-xs-2 col-sm-2 imgupload" type="button">浏览...</button></div>' +
+                             '<td><a href="javascript:;" class="del_spec">删除</a></td></tr>';
+            $('#spec_table tbody').append(html);
+        })
+
+        $(document).on('click','.del_spec',function () {
+            if(confirm('确认要删除？')){
+                $(this).parent().parent().remove();
+            }
+        })
+        $(document).on('click','.imgupload',function () {
+            var id = $(this).attr('data-id');
+            uploadImage(1,id,'');
+        })
+    })
+</script>
+<div class="table-responsive">
+	
+	<table id="spec_list" class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th width="200">商品标签</th>
+			<th width="200">商品货号</th>
+			<th width="200">商品条码</th>
+			<th width="200">商品规格</th>
+			<th width="100">销售价格</th>
+			<th width="100">市场价格</th>
+			<th width="100">库存</th>
+			<th width="100">重量</th>
+			<th width="100">体积</th>
+			<th width="100">操作</th>
+		</tr>
+		</thead>
+
+		<tbody id="app">
+		<tr v-for="sku in sku_list">
+			<td data-column="status_ext">
+			   <span class="label" data-value="1" :class="sku.status_ext==1? 'badge-primary':''">促</span>
+			   <span class="label" data-value="2" :class="sku.status_ext==2? 'badge-primary':''">热</span>
+			   <span class="label" data-value="3" :class="sku.status_ext==3? 'badge-primary':''">新</span>
+			   <span class="label" data-value="4" :class="sku.status_ext==4? 'badge-primary':''">推</span>
+			   <input type="hidden" :name="'status_ext['+(sku.spec_md5?sku.spec_md5:'')+']'" :value="sku.status_ext">
+			</td>
+			<td><input class="col-xs-12 col-sm-12" :name="'sn['+(sku.spec_md5?sku.spec_md5:'')+']'" :value="sku.sn" type="text"></td>
+			<td><input class="col-xs-12 col-sm-12" :name="'barcode['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.barcode?sku.barcode:''"></td>
+			<td class="left">
+				{{sku.spec}}
+				<input type="hidden"  :name="'specs['+(sku.spec_md5?sku.spec_md5:'')+']'" :value="sku.spec_query">
+			</td>
+			<td><input class="col-xs-12 col-sm-12" :name="'shop_price['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.shop_price?sku.shop_price:'0.00'"></td>
+			<td><input class="col-xs-12 col-sm-12" :name="'market_price['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.market_price?sku.market_price:'0.00'"></td>
+			<td><input class="col-xs-12 col-sm-12" :name="'number['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.number?sku.number:0"></td>
+			<td><input class="col-xs-12 col-sm-12" :name="'weight['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.weight?sku.weight:'0.00'"></td>
+			<td><input class="col-xs-12 col-sm-12" :name="'volume['+(sku.spec_md5?sku.spec_md5:'')+']'" type="text" :value="sku.volume?sku.volume:'0.00'"></td>
+			<td><a href="javascript:;" data-model="spec_delete">删除</a></td>
+		</tr>
+		<a href="javascript:void(0);" data-model="spec_popup">添加/编辑规格</a>
+		</tbody>
+	</table>
+</div>

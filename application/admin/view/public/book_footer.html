@@ -42,6 +42,19 @@
 		<script src="/ace/assets/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+		 <script type="text/javascript">
+			var editor = $('#editor')
+			if (editor.attr('id') !== undefined)
+			{
+				bkLib.onDomLoaded(function()
+				{
+				new nicEditor({
+				    iconsPath : '/static/nicedit/nicEditorIcons.gif'
+				}).panelInstance('editor')
+				})
+			}
+	</script>
+
 		<script type="text/javascript">
 			jQuery(function($) {
 				$('.easy-pie-chart.percentage').each(function(){

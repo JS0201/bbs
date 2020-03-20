@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$title}</title>
+<link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
+<!--theme-style-->
+<link href="/shop/css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<link rel="stylesheet" href="/shop/css/etalage.css" type="text/css" media="all" />
+<!--//theme-style-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--fonts-->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+<!--//fonts-->
+<script src="/shop/js/jquery.min.js"></script>
+<script src="/shop/js/jquery.easydropdown.js"></script>
+<script src="/shop/js/jquery.etalage.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+
+<script>
+			jQuery(document).ready(function($){
+
+				$('#etalage').etalage({
+					thumb_image_width: 300,
+					thumb_image_height: 400,
+					source_image_width: 900,
+					source_image_height: 1200,
+					show_hint: true,
+					click_callback: function(image_anchor, instance_id){
+						alert('Callback example:\nYou clicked on an image with the anchor: "'+image_anchor+'"\n(in Etalage instance: "'+instance_id+'")');
+					}
+				});
+
+			});
+		</script>
+<style type="text/css">
+    .bottom-header{
+        height: 120px;
+        position: relative;
+    }
+    .logo img{
+       height: 100px;
+       width: 100px;
+    }
+    .header-bottom-right{
+        position: absolute;
+        top:30px;
+    }
+
+    #ad #add{
+    	position: absolute;
+    	top: 580px;
+    	right: 292px;
+    	height: 50px;
+    	width: 130px;
+    	font-size: 15px;
+    }
+    #ad #buy{
+    	position: absolute;
+    	top: 575px;
+    	right: 150px;
+    	height: 50px;
+    	width: 130px;
+    	font-size: 15px;
+    }
+    #ad #num{
+    	background-color: #f0f3f9;	
+    	position: absolute;
+    	right: 433px;
+    	top: 580px;
+    	width: 100px;
+    	height: 50px;
+    }
+    #ad .n{
+    	position: absolute;
+    	top: 593px;
+    }
+    #ad span{
+    	font-size: 20px;
+    }
+    .glyphicon glyphicon-shopping-cart{
+		font-size: 25px;
+    }
+    .max_price{
+    	color: #A0A0A0FF;
+    	font-size: 13px;
+    }
+
+ </style>
+</head>
+<div class="header">
+        <div class="bottom-header">
+            <div class="container">
+                <div class="header-bottom-left">
+                    <div class="logo">
+                        <a href="index.html"><img src="/shop/images/astar.jpg" alt=" " /></a>
+                    </div>
+                    <div class="search">
+                        <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
+                        <input type="submit"  value="搜索">
+
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="header-bottom-right" >
+                    <ul class="men-grid">
+                        <li class="login"><a href="/index/index/index"><span> </span>返回论坛</a></li>
+                        <li style="position: absolute; left: 130px"><a href="/index/member/show/user_id/{$uid}"><span> </span>账户</a></li>
+                        <li class="cart" style="position: absolute; left: 249px"><a href="/order/cart/index"><span> </span>购物车</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"> </div>   
+            </div>
+        </div>
+    </div>
+<body> 
+
+	
+	 <div class="container"> 
+	 	
+	 	<div class=" single_top">
+	      <div class="single_grid">
+				<div class="grid images_3_of_2">
+						<ul id="etalage">
+							{volist name="imgs" id="imgs"}
+							<li>
+								<a href="optionallink.html">
+									<img class="etalage_thumb_image" src="/uploads/{$imgs.img}" class="img-responsive" />
+									<img class="etalage_source_image" src="/uploads/{$imgs.img}" class="img-responsive" title="" />
+								</a>
+							</li>
+							{/volist}
+						</ul>
+						 <div class="clearfix"> </div>		
+				  </div> 
+				  <div class="desc1 span_3_of_2">
+				  	<div class="desc11">
+				  		<ul class="back">
+                	  <li><i class="back_arrow"> </i>返回 <a href="/goods/index/index">书店主页</a></li>
+                    </ul>
+					<h1>{$list.name}</h1>
+					<ul class="price_single">
+					  <li class="head"><h2>￥{$list.min_price}</h2></li>
+					  <div class="clearfix"> </div>
+					</ul>
+					<ul>
+						<li class="max_price"><s>定价:￥{$list.max_price}</s></li>
+					</ul>
+					<ul>
+						<p style="height: 215px">{$list.description}</p>
+					</ul>
+					<div style="display:inline;" id="ad">
+						<span class="n">数量:</span><input type="number" id="num" name="sum" value='1'>
+							<button onclick="cart()" id="add" class="btn btn-primary btn-block" ><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;加入购物车</button>
+							<button onclick="buy(this)" id="buy" spu_id="{$list.id}" class="btn btn-primary btn-block" >立即购买</button>
+					</div>
+					
+								
+							
+				  	</div>
+				  	
+					
+				    
+			         
+			       
+				</div>
+						
+          	    <div class="clearfix"> </div>
+          	   </div>
+          	   
+	    <script type="text/javascript">
+			function buy(ob){
+				var spu_id = ob.getAttribute('spu_id');
+				var sum = $('#num').val();
+				window.location.href='/order/order/detailConfirm?spu_id='+spu_id+'&sum='+sum;
+			}
+		 $(window).load(function() {
+			$("#flexiselDemo1").flexisel({
+				visibleItems: 5,
+				animationSpeed: 1000,
+				autoPlay: true,
+				autoPlaySpeed: 3000,    		
+				pauseOnHover: true,
+				enableResponsiveBreakpoints: true,
+		    	responsiveBreakpoints: { 
+		    		portrait: { 
+		    			changePoint:480,
+		    			visibleItems: 1
+		    		}, 
+		    		landscape: { 
+		    			changePoint:640,
+		    			visibleItems: 2
+		    		},
+		    		tablet: { 
+		    			changePoint:768,
+		    			visibleItems: 3
+		    		}
+		    	}
+		    });
+		    
+		});
+	</script>
+	<script type="text/javascript" src="js/jquery.flexisel.js"></script>
+
+          	    	<div class="toogle">
+				     	<h3 class="m_3">详细描述</h3>
+				     	<p class="m_text">{$list.content}</p>
+				     </div>	
+          	   </div>
+          	   
+{include file="public::left"/}
+				<!--initiate accordion-->
+		<script type="text/javascript">
+			$(function() {
+			    var menu_ul = $('.menu > li > ul'),
+			           menu_a  = $('.menu > li > a');
+			    menu_ul.hide();
+			    menu_a.click(function(e) {
+			        e.preventDefault();
+			        if(!$(this).hasClass('active')) {
+			            menu_a.removeClass('active');
+			            menu_ul.filter(':visible').slideUp('normal');
+			            $(this).addClass('active').next().stop(true,true).slideDown('normal');
+			        } else {
+			            $(this).removeClass('active');
+			            $(this).next().stop(true,true).slideUp('normal');
+			        }
+			    });
+			
+			});
+		</script>
+		
+
+		<script type="text/javascript">
+			function cart(){
+		    var nums = $("input[name='sum']").val();
+		    var spu_id = {$list.id};
+		    $.post('/order/cart/cart_add',
+		    	{spu_id:spu_id, nums:nums},
+		    	function(data) {
+		    		alert(data.message);
+            });
+        }
+		</script>
+</body>
+</html>

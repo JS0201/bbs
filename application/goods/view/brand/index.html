@@ -1,0 +1,87 @@
+{extend name="public/book_base" /}
+{block name="body"}
+<div class="main-content">
+
+	<div class="main-content-inner">
+
+		<div class="page-content">
+
+			<div class="row">
+				<div class="col-xs-12">
+
+
+                    <div class="border clearfix">
+
+                        <a href="{:url('add')}" class="btn btn-warning btn-sm glyphicon glyphicon-plus" style="border-radius: 6px;width: 80px;"><i class="icon-plus bigger-120"></i> 添加</a>
+                        &nbsp;
+                        <a href="{:url('delete')}" data-ajax="id" class="btn btn-danger btn-sm glyphicon glyphicon-trash" style="border-radius: 6px;width: 80px;"><i class="icon-plus bigger-120"></i> 删除</a>
+                    </div></br>
+
+    <!--
+        <div class="tree" style="display:inline-block;">
+         <i class="icon-plus"></i>
+        </div>
+
+        预留异步加载
+    -->
+	<div class="table-responsive">
+	  <table id="sample-table" class="table table-striped table-bordered table-hover">
+   <thead>
+    <tr>
+     <th width="50"> <label> <input type="checkbox" class="ace " id="check-all" /> <span class="lbl"></span> </label> </th>
+     <th width="50">排序</th>
+     <th width="50">ID</th>
+     <th width="200">品牌名称</th>
+     <th>品牌描述</th>
+     <th width="100">推荐</th>
+     <th width="100">状态</th>
+     <th width="200">操作</th>
+    </tr>
+   </thead>
+   <tbody>
+   {volist name="list" id="foo"}
+    <tr>
+     <td> <label class="check-option"> <input type="checkbox" class="ace"  value="{$foo['id']}" /> <span class="lbl"></span> </label> </td>
+     <td>{$foo['sort']}</td>
+     <td>{$foo['id']}</td>
+     <td class="left">{$foo['name']}</td>
+     <td>{$foo['descript']}</td>
+     <td><i class="{eq name="$foo['isrecommend']" value="1"}glyphicon glyphicon-ok" style="color:red"{/eq}{eq  name="$foo['isrecommend']" value="0"} glyphicon glyphicon-remove" style="color:green"{/eq}></i></td>
+     <td><i class="{eq name="$foo['status']" value="1"}glyphicon glyphicon-ok" style="color:red"{/eq}{eq  name="$foo['status']" value="0"} glyphicon glyphicon-remove" style="color:green"{/eq}></i></td>
+     <td>
+      <div>
+          <a class="pink" href="{:url('content/content/index',['id'=>$foo['id']])}"> <i class="icon-book bigger-130"></i> 商品</a>
+          &nbsp;
+       <a class="green" href="{:url('edit',['id'=>$foo['id']])}"> <i class="icon-pencil bigger-130"></i> 编辑</a>
+          &nbsp;
+       <a class="red" href="" onclick="dele({$foo['id']});return false;"> <i class="icon-trash bigger-130"></i> 删除</a>
+      </div>
+     </td>
+    </tr>
+   {/volist}
+
+   </tbody>
+  </table>
+					</div>
+
+				</div>
+
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+
+</div>
+<script type="text/javascript">
+  function dele(id){
+    if (confirm('是否确定删除？')==true) {
+      window.location.href="{:url('delete')}"+"?id="+id;
+    }
+  }
+</script>
+{/block}
+

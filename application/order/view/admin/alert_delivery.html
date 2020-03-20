@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{load href="/static/css/bootstrap.min.css" /}
+	{load href="/static/js/jquery-3.3.1.min.js" /}
+	{load href="/static/js/bootstrap.min.js" /}
+	<title></title>
+	<style type="text/css">
+	#tag1{
+		position: relative;
+		left: 30px;
+	}
+	#delivery_id{
+		width: 250px;
+	}
+	#delivery_sn{
+		width: 250px;
+		height: 35px;
+	}
+	.ischoise{
+		position: relative;
+		margin: 20px auto 30px auto;
+	}
+	</style>
+</head>
+<body>
+<script>
+$(function(){
+
+	$('#breadcrumbs').parent().remove();
+	/*
+	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.iframeAuto(index);
+	$(window.parent.document.body).find('.layui-layer-iframe').css({'top':'300px'});
+	*/
+	
+	$('[name=is_choise]').bind("change" ,function(){
+		if ($(this).val() == '2') {
+			$("input[name=delivery_sn]").prop('disabled',true);
+			$("select[name=delivery_id]").prop('disabled',true);
+			
+		} else {
+			$("input[name=delivery_sn]").prop('disabled',false);
+			$("select[name=delivery_id]").prop('disabled',false);
+		
+		}
+	})
+	
+	
+})
+</script>
+
+<div class="main-content">
+
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="tabbable">
+  
+                    <form class="form-horizontal" action="{:url('delivery')}"  role="form" method="post">
+                        <input type="hidden" name="sn" value="<?php echo input('sn'); ?>"/>
+                        <div class="tab-content" style="border:0;">
+
+                            <div id="tag1" class="tab-pane active">
+       <div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2 ischoise">
+			      <div class="choise">
+			      <label class="radio-inline">
+			        <input type="radio" name="is_choise"  value="1"> 选择物流公司
+			      </label>
+			  </div>
+			  <div class="unchoise">
+			      <label class="radio-inline">
+			        <input type="radio" name="is_choise"  value="2"> 
+			        <span>无需物流运输</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+		<div class="form-group">
+		    <label for="delivery_id" class="col-sm-3 control-label">物流公司</label>
+		    <div class="col-sm-9">
+		      <select class="form-control" id="delivery_id" name="delivery_id">
+		      <option>物流公司</option>
+		      {volist name="deliverys" id="deliverys"}
+		      <option value="{$deliverys.id}">{$deliverys.name}</option>
+		      {/volist}
+		      </select>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="delivery_sn" class="col-sm-3 control-label">物流单号</label>
+		    <div class="col-sm-9">
+		      <input type="text"  name="delivery_sn" id="delivery_sn">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="msg" class="col-sm-3 control-label">订单日志</label>
+		    <div class="col-sm-9">
+		      <textarea name="msg" id="msg" cols="32" rows="6" placeholder= '请填写订单操作日志（选填）'></textarea>
+		    </div>
+
+		  </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+{extend name="public/book_base" /}
+{block name="body"}
+<div class="main-content">
+
+<div class="main-content-inner">
+
+<div class="page-content">
+
+<div class="row">
+<div class="tabbable">
+ 	<ul class="nav nav-tabs" >
+    	<li role="presentation" class="active"><a data-toggle="tab" href="add">基本信息</a></li>
+</ul></br></br>
+
+		<form class="form-horizontal" id="edit" method="post">
+		  <div class="form-group">
+		    <label for="name" class="col-sm-3 control-label">品牌名称</label>
+		    <div class="col-sm-9 form-inline">
+		      <input type="text" class="form-control" name="name" id="name"  style="width: 55%">
+		      <font size="2" color="#A0A0A0">请填写商品品牌的名称；例如：可口可乐等</font>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="logo" class="col-sm-3 control-label">品牌图片</label>
+		    <div class="col-sm-9">
+		      <input type="file"  name="logo" id="logo" style="width: 55%;float:left">
+		      <font size="2" color="#A0A0A0">请上传品牌LOGO，用于前台展示</font>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="url" class="col-sm-3 control-label">品牌网址</label>
+		    <div class="col-sm-9 form-inline">
+		      <input type="text" class="form-control" name="url" id="url" style="width: 55%">
+		      <font size="2" color="#A0A0A0">请上传品牌LOGO，用于前台展示</font>
+		    </div>
+		  </div>	
+		  <div class="form-group">
+		  <label for="descript" class="col-sm-3 control-label">品牌描述</label>
+		  <div class="col-sm-9 form-inline">
+		  <textarea id="descript"  class="form-control" name="descript" style="min-height: 130px;width: 55%;">
+          </textarea>
+          <font size="2" color="#A0A0A0">请填写品牌的描述信息</font>
+      	  </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="sort" class="col-sm-3 control-label">排序</label>
+		    <div class="col-sm-9 form-inline">
+		      <input type="text" class="form-control" name="sort" id="sort" style="width: 55%">
+		      <font size="2" color="#A0A0A0">请填写自然数，文字分类列表将会根据排序进行由小到大排列显示</font>
+		    </div>
+		  </div>
+		  
+		  	<div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2">
+	  			<label class="col-sm-4 control-label">是否推荐</label>   
+			      <div style="position: absolute;left: 120px;">
+			      <label class="radio-inline">
+			        <input type="radio" name="isrecommend"  value="1"> 允许
+			      </label>
+			      <label class="radio-inline">
+			        <input type="radio" name="isrecommend"  value="0"> 
+			        <span>禁止</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+			<div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2">
+	  			<label for="inputEmail3" class="col-sm-4 control-label">是否启用</label>   
+			      <div style="position: absolute;left: 120px;">
+			      <label class="radio-inline">
+			        <input type="radio" name="status"  value="1"> 允许
+			      </label>
+			      <label class="radio-inline">
+			        <input type="radio" name="status"  value="0"> 
+			        <span>禁止</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-10">
+					<button type="submit" class="btn btn-info glyphicon glyphicon-ok" style="border-radius: 6px;" id="submit">
+					<i class="icon-ok bigger-110"></i>保存
+					</button>
+				<button class="btn glyphicon glyphicon-repeat" type="reset" style="border-radius: 6px;">
+					<i class="icon-undo"></i>
+					重置
+				</button>
+			</div>
+		</div>
+	</form>
+   <script type="text/javascript">
+  $(function(){
+    $('#submit').on('click',function(){
+      $.ajax({
+        type: 'post',
+        url: "{:url('add')}",
+        data: $('#edit').serialize(),
+        dataType: 'json',
+        success: function(data){
+          switch (data.status)
+          {
+            case 1:  
+              alert(data.message);
+              window.location.href = "{:url('add')}";
+            break;
+            case 0:
+              alert(data.message);
+              window.location.href = "{:url('add')}";
+            break;
+          }
+
+        }
+      })
+  })
+  })
+</script>    
+
+
+        <form class="form-horizontal">
+
+    </div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+{/block}
+ 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {load href="/static/css/bootstrap.min.css" /}
+    {load href="/static/js/jquery-3.3.1.min.js" /}
+    {load href="/static/js/bootstrap.min.js" /}
+    <title></title>
+    <style type="text/css">
+    #tag1{
+        position: relative;
+        left: 30px;
+    }
+    #delivery_id{
+        width: 250px;
+    }
+    #delivery_sn{
+        width: 250px;
+        height: 35px;
+    }
+    .ischoise{
+        position: relative;
+        margin: 20px auto 30px auto;
+    }
+    </style>
+</head>
+<body>
+<script>
+$(function(){
+
+    $('#breadcrumbs').parent().remove();
+    /*
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.iframeAuto(index);
+    $(window.parent.document.body).find('.layui-layer-iframe').css({'top':'300px'});
+    */
+    }
+</script>
+
+<div class="main-content">
+
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="tabbable">
+  
+                    <form class="form-horizontal" action="{:url('cancel')}"  role="form" method="post">
+                        <input type="hidden" name="sn" value="<?php echo input('sn'); ?>"/>
+                        <div class="tab-content" style="border:0;">
+
+                            <div id="tag1" class="tab-pane active">
+       <div class="form-group">
+                <div class="col-sm-3 col-md-offset-2 ischoise">
+                    {if condition="$order['pay_status'] eq 1"}
+                  <div class="choise">
+                  <label class="radio-inline">
+                    <input type="radio" name="isrefund"  value="1" checked=""> 退款到账户余额
+                  </label>
+                  <p style="color:red;">温馨提示：该订单已支付￥{$order['real_amount']}</p>
+              </div>
+              {else/}
+                <p style="color:red;">温馨提示：该订单未支付，无需退款</p>
+              {/if}
+          <div class="form-group">
+            <label for="msg" class="col-sm-3 control-label">是否确认取消订单</label>
+            <div class="col-sm-9">
+              <textarea name="msg" id="msg" cols="32" rows="6" placeholder= '请填写订单操作日志（选填）'></textarea>
+            </div>
+
+          </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+</body>
+</html>

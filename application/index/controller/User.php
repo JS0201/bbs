@@ -62,32 +62,19 @@ class User extends Base
     }
 
 	//用户登录
-	public function loginCheck()
-	{		
-		
-		if(Request::isAjax())
-		{
-			$data = Request::post();
-            $rule = 'app\common\validate\Login';
-            $res=$this->validate($data,$rule);
-            if (true !== $res){  
-                return ['status'=> -1, 'message'=>$res];
-            }
-		  		$mem = new Member;
-		  	switch($mem->mem_loginCheck($data))
-		  	{
-		  		case 1:
-		  		return ['status'=>1, 'message'=>'登录成功！'];
-		  		break;
-		  		case 0:
-		  		return ['status'=>0, 'message'=>'用户已被禁用！'];
-		  		break;
-		  		case -1:
-		  		return ['status'=>-1, 'message'=>'检查用户名密码！'];	
-		  		break;
-		  	}
-		}			 
-}
+    public function loginCheck()
+    {		
+
+    	if(Request::isAjax())
+    	{
+    		$data = Request::param();
+    		$mem = new Member;
+    		if($mem->mem_loginCheck($data))
+    		{
+    			return ['status'=>1, 'message'=>'登录成功！'];
+    		}
+    	}			 
+    }
 
 
 	//退出登录

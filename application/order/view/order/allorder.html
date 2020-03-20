@@ -1,0 +1,70 @@
+{extend name="public:base" /}
+{block name="script"}
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
+{/block}
+{block name="css"}
+{/block}
+{block name="body"}
+<div class="main-content">
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="tabbable">
+                   
+                    <ul class="nav nav-tabs nav-justified">
+
+                        <li class="active"><a data-toggle="tab" href="#tag1">全部</a></li>
+                        
+                        <li><a data-toggle="tab" href="#tag2">待付款</a></li>
+
+                        <li><a data-toggle="tab" href="#tag3">待发货</a></li>
+
+                        <li><a data-toggle="tab" href="#tag4">待收货</a></li>
+                    </ul>
+
+                    <form class="form-horizontal" action="{:url('add')}" role="form" method="post" enctype="multipart/form-data">
+                        
+                        <div class="tab-content">
+
+                            <div id="tag1" class="tab-pane active">
+                                
+                            </div>
+
+                            <div id="tag2" class="tab-pane ">
+                                
+                            </div>
+
+                            <div id="tag3" class="tab-pane">
+                                
+                            </div>
+
+                            <div id="tag4" class="tab-pane">
+                                
+                            </div>
+
+
+                        </div>
+
+                        <div class="clearfix form-actions">
+                            <div class="col-md-offset-3 col-md-10">
+                                <button type="submit" class="btn btn-info glyphicon glyphicon-ok" style="border-radius: 6px;" id="submit">
+                                    <i class="icon-ok bigger-110"></i>保存
+                        </button>
+                        <button class="btn glyphicon glyphicon-repeat" type="reset" style="border-radius: 6px;">
+                            <i class="icon-undo"></i>
+                                     重置
+                        </button>
+                             </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+{/block}

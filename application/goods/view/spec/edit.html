@@ -1,0 +1,146 @@
+{extend name="public/book_base" /}
+{block name="body"}
+<div class="main-content">
+
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs" >
+                        <li class="active"><a data-toggle="tab" href="#tag1">基本信息</a></li>
+                    </ul>
+                    <form class="form-horizontal"  role="form" method="post" id="edit">   
+                        <div class="tab-content">
+                            <div id="tag1" class="tab-pane active">
+                                <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">规格名称</label>
+                                <div class="col-sm-9 form-inline">
+                                  <input type="text" class="form-control" name="name" id="name"  style="width: 55%" placeholder="{$info.name}">
+                                  <font size="2" color="#A0A0A0">请填写常用的商品规格的名称；例如：颜色；尺寸等</font>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="sort" class="col-sm-3 control-label">排序</label>
+                                <div class="col-sm-9 form-inline">
+                                  <input type="text" class="form-control" name="sort" id="sort"  style="width: 55%" placeholder="{$info.sort}">
+                                  <font size="2" color="#A0A0A0">请填写自然数，根据排序进行由小到大排列显示</font>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-sm-3 col-md-offset-2">
+                                <label for="inputEmail3" class="col-sm-4 control-label">是否启用</label>   
+                                  <div style="position: absolute;left: 120px;">
+                                  <label class="radio-inline">
+                                    <input type="radio" name="status"  value="1"> 允许
+                                  </label>
+                                  <label class="radio-inline">
+                                    <input type="radio" name="status"  value="0"> 
+                                    <span>禁止</span>
+                                  </label>
+                                  </div>
+                            </div>
+                            </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right"></label>
+                                    <div class="col-sm-10">
+                                        <div class="col-xs-12 col-sm-12 gboy-padding-0">
+                                            <div class="table-responsive">
+                                                <div class="widget-header">
+                                                     <a href="javascript:;" class="spec-add"><i class="glyphicon glyphicon-plus"></i>添加一个属性</a>
+                                                </div>
+                                                <table  class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="col-xs-10">属性名称</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    {if condition="is_array($info['value'])"}
+                                                    {foreach name="info['value']" id="spec"}
+                                                    <tr>
+                                                        <td><input class="col-xs-5 col-sm-5" name="value[]" value="{$spec}" type="text"></td>
+                                                        <td><a href="javascript:;" class="del_spec">删除</a></td>
+                                                    </tr>
+                                                    {/foreach}
+                                                    {/if}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix form-actions">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button class="btn btn-info"  type="button" id="submit">
+                                    <i class="icon-ok bigger-110"></i>
+                                    保存
+                                </button>
+
+
+                                <button class="btn" type="reset">
+                                    <i class="icon-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+<script>
+    $(function(){
+
+        $('.spec-add').on('click',function () {
+            var html='<tr><td><input class="col-xs-5 col-sm-5" name="value[]" type="text"></td> <td><a href="javascript:;" class="del_spec">删除</a></td></tr>';
+
+
+            $('.table tbody').append(html);
+        })
+
+        $(document).on('click','.del_spec',function () {
+            if(confirm('确认要删除？')){
+                $(this).parents('tr').remove();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+  $(function(){
+    $('#submit').on('click',function(){
+      $.ajax({
+        type: 'post',
+        url: "{:url('edit')}",
+        data: $('#edit').serialize(),
+        dataType: 'json',
+        success: function(data){
+          switch (data.status)
+          {
+            case 1:  
+              alert(data.message);
+              window.location.href = "{:url('add')}";
+            break;
+            case 0:
+              alert(data.message);
+              window.location.href = "{:url('add')}";
+            break;
+          }
+
+        }
+      })
+  })
+  })
+</script>    
+{/block}

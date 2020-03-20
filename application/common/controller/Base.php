@@ -7,6 +7,7 @@ use app\common\model\ArtCate;
 use app\common\model\Article;
 use app\common\model\User;
 use app\admin\common\model\Site;  
+use app\goods\common\model\Category;
 
 class Base extends Controller
 {
@@ -21,6 +22,8 @@ class Base extends Controller
         $this->getHotArt();
         //书店导航
         $this->showBookNav();
+        //书店后台导航
+        $this->nav();
     }
 
     //检查是否已登录
@@ -35,7 +38,7 @@ class Base extends Controller
     protected function isLogin()
     {
         if (!Session::has('user_id')) {
-            $this->error('您还未登陆，请登陆！','user/login');
+            $this->error('您还未登陆，请登陆！','/index/user/login');
         }
     }
 
@@ -94,6 +97,12 @@ INFO;
         $this->view->assign('hotArtList', $hotArtList);
     }
 
+    //书店后台导航
+    protected function nav()
+    {
+        $data = Category::all();
+        $this->view->assign('data',$data);
+    }
 }
 
 

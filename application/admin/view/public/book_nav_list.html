@@ -163,22 +163,60 @@
 
 								<ul class="submenu">
 									<li class="">
-										<a href="top-menu.html">
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa-caret-right"></i>
+
+									商品列表
+									<b class="arrow fa fa-angle-down"></b>
+								</a>
+
+								<b class="arrow"></b>
+
+								<ul class="submenu">
+									<li class="">
+										<a href="/goods/admin/index">
 											<i class="menu-icon fa fa-caret-right"></i>
-											商品列表
+											全部商品
 										</a>
 
 										<b class="arrow"></b>
 									</li>
+									{foreach name="data" id="da"}
+									<li class="">
+										<a href="/goods/admin/index/catid/{$da.id}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											{$da.name}
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+									{/foreach}
+								</ul>
+							</li>
 
 									<li class="">
-										<a href="two-menu-1.html">
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa-caret-right"></i>
+
+									添加商品
+									<b class="arrow fa fa-angle-down"></b>
+								</a>
+
+								<b class="arrow"></b>
+
+								<ul class="submenu">
+									{foreach name="data" id="da"}
+									<li class="">
+										<a href="/goods/admin/add/catid/{$da.id}">
 											<i class="menu-icon fa fa-caret-right"></i>
-											添加商品
+											{$da.name}
 										</a>
 
 										<b class="arrow"></b>
 									</li>
+									{/foreach}
+								</ul>
+							</li>
 								</ul>
 							</li>
 
@@ -225,7 +263,7 @@
 
 								<ul class="submenu">
 									<li class="">
-										<a href="top-menu.html">
+										<a href="/goods/brand/index">
 											<i class="menu-icon fa fa-caret-right"></i>
 											品牌列表
 										</a>
@@ -234,7 +272,7 @@
 									</li>
 
 									<li class="">
-										<a href="two-menu-1.html">
+										<a href="/goods/brand/add">
 											<i class="menu-icon fa fa-caret-right"></i>
 											添加品牌
 										</a>
@@ -256,7 +294,7 @@
 
 								<ul class="submenu">
 									<li class="">
-										<a href="top-menu.html">
+										<a href="/goods/spec/index">
 											<i class="menu-icon fa fa-caret-right"></i>
 											规格列表
 										</a>
@@ -265,7 +303,7 @@
 									</li>
 
 									<li class="">
-										<a href="two-menu-1.html">
+										<a href="/goods/spec/add">
 											<i class="menu-icon fa fa-caret-right"></i>
 											添加规格
 										</a>
@@ -279,7 +317,7 @@
 					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-list"></i>
-							<span class="menu-text"> Tables </span>
+							<span class="menu-text"> 订单管理 </span>
 
 							<b class="arrow fa fa-angle-down"></b>
 						</a>
@@ -288,18 +326,9 @@
 
 						<ul class="submenu">
 							<li class="">
-								<a href="tables.html">
+								<a href="\order\admin\index">
 									<i class="menu-icon fa fa-caret-right"></i>
-									Simple &amp; Dynamic
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="jqgrid.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									jqGrid plugin
+									订单管理
 								</a>
 
 								<b class="arrow"></b>

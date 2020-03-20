@@ -26,7 +26,6 @@ class MoneyFinance extends Base
     public function setFinance($uid, $number, $type, $msg = '',$admin_id = '', $settype = true, $transaction_type, $fromid, $signid = 0)
     {
         $finance = $this->Fin->getByUid($uid);
-
         $money = $settype ? $finance[$type] + $number : $finance[$type] - $number;
         $money_re = $this->Fin->updated("uid = {$uid}", array("{$type}" => $money, "time" => time())); //修改金额
         $log_model = new MemberLog();

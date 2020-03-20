@@ -6,10 +6,20 @@ use think\facade\Session;
 use app\common\model\User as UserModel; 
 use think\facade\Request; 
 use app\common\model\RechangeCheck;
-use app\admin\common\model\Finance; 
+use app\admin\common\model\Finance;
+use app\admin\common\model\MemberLog; 
+use think\Db;
+
 
 class Member extends Base
 {
+    public function initialize()
+    {
+        $this->finance = new Finance;
+        $this->rechangecheck = new RechangeCheck();
+        $this->user = new UserModel();
+        $this->memberlog = new MemberLog();
+    }
 	/*
         注册   
      */
@@ -156,6 +166,51 @@ class Member extends Base
         {
           return 1; 
         }
+    }
+
+    /**
+     * 变更用户账户
+     * @param int $mid
+     * @param string $type
+     * @param int $num
+     * @param boolean $iswritelog
+     * @return boolean 状态
+     */
+    public function change_account($mid, $field ,$num, $msg = '',$iswritelog = TRUE) {
+        if(strpos($num, '-') === false && strpos($num, '+') === false) $num = '+'.$num;
+        if(strpos($num, '-') === false){
+            //累计
+            $result = $this->finance->where(['uid' => $mid])->setInc($field,$num);
+         }else{
+            $value = $this->model->where(['id'=>$mid])->value($field);
+            if(abs($num) > $value){
+                //不足归0
+                $result = $this->model->where(['id' => $mid])->setField($field,0);
+            }else{
+                //递减
+                $result = $this->model->where(['id' => $mid])->setInc($field,$num);
+            }
+        }
+
+        if($result === false) {
+            return FALSE;
+        }
+        $isadmin = Request::session('is_admin');
+        if($iswritelog === true) {
+            $_member=$this->finance->where(['uid'=>$mid])->field($field)->find();
+            $log_info = array(
+                'mid'      => $mid,
+                'value'    => $num,
+                'type'     => $field,
+                'msg'      => $msg,
+                'dateline' => time(),
+                'admin_id' => ($isadmin = 1) ? 1 : 0,
+                'money_detail' => json_encode(array($field => sprintf('%.2f' ,$_member[$field])))
+            );
+            $this->memberlog->data($log_info)->save();
+        }
+
+        return TRUE;
     }
 
 }

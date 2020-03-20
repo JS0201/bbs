@@ -1,0 +1,277 @@
+{extend name="public:book_base" /}
+
+{block name="script"}
+<script src="/ace/assets/js/jquery.md5.js" charset="utf-8" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+//笛卡儿积组合
+function descartes(list, specData) {
+    var point = {};
+    var result = [];
+    var pIndex = null;
+    var tempCount = 0;
+    var temp = [];
+    for (var index in list) {
+        if (typeof list[index] == 'object') {
+            point[index] = {
+                'parent': pIndex,
+                'count': 0
+            }
+            pIndex = index;
+        }
+    }
+    if (pIndex == null) {
+        return list;
+    }
+    while (true) {
+        for (var index in list) {
+            tempCount = point[index]['count'];
+            temp.push({
+                "id": specData[index].id,
+                "name": specData[index].name,
+                "style": specData[index].style,
+                "color": list[index][tempCount].color,
+                "img": list[index][tempCount].img,
+                "value": list[index][tempCount].value
+            });
+        }
+        result.push(temp);
+        temp = [];
+        while (true) {
+            if (point[index]['count'] + 1 >= list[index].length) {
+                point[index]['count'] = 0;
+                pIndex = point[index]['parent'];
+                if (pIndex == null) {
+                    return result;
+                }
+                index = pIndex;
+            } else {
+                point[index]['count']++;
+                break;
+            }
+        }
+    }
+}
+
+$(function(){
+    var goods_init = new Array();
+    var defaultProductNo = $('input[name="spu[sn]"]').val() ? $('input[name="spu[sn]"]').val() : "<?php echo 'NU' . time() . rand(10, 99) ?>";
+
+    for(var i=0;i<1;i++){
+        goods_init[i] = new Array();
+    }
+
+
+    goods_init[0]['sn'] = defaultProductNo + '-1';
+
+
+    $('input[name="spu[sn]"]').val(defaultProductNo);
+    productNo = $('input[name="spu[sn]"]').val();
+
+    selectedItem = goods?goods.extra.specs :goods_init;
+
+    sku = goods?goods._sku:goods_init;
+
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            sku_list: sku
+        }
+    });
+
+
+
+
+
+
+    $('[data-model="spec_popup"]').on('click',function(){
+        layer.open({
+            type: 2,
+            title: '请选择规格',
+            shadeClose: false,
+            resize:false,
+            scrollbar:false,
+            move:false,
+            shade: 0.3,
+            btn: ['确认','取消'],
+            area: ['680px', '580px'],
+            content: '{:url("goods_spec_pop")}',
+            yes:function( index,layero){
+                var body = layer.getChildFrame('body', index);
+                specMaxData={};
+                var productNu = selectedItem ? productNo + '-1' : $('input[name="sn[]"]').eq(0).val();
+                var specValueData = {}
+                var specData = {};
+                var selectedNewItem = [];
+                body.find('.spec-num a.current').each(function(){
+                    var data_id = $(this).attr('data-id');
+                    var data_name = $(this).attr('data-name');
+                    var data_value = $(this).attr('data-value');
+                    var data_style = $(this).attr('data-style');
+                    var data_color = $(this).attr('data-color');
+                    var data_img = $(this).attr('data-img');
+                    selectType = $(this).attr('data-type') ? $(this).attr('data-type') : 0;
+                    if (typeof (specValueData[data_id]) == 'undefined') {
+                        specValueData[data_id] = [];
+                    }
+                    specValueData[data_id].push({
+                        'value': data_value,
+                        'img': data_img,
+                        'color': data_color
+                    });
+                    specData[data_id] = {
+                        'id': data_id,
+                        'name': data_name,
+                        'style': data_style,
+                    };
+                    selectedNewItem.push({
+                        'id': data_id,
+                        'value': data_value,
+                        'color': data_color,
+                        'img': data_img,
+                        'style': data_style
+                    });
+                })
+                //console.log(specValueData);
+
+                selectedItem=selectedNewItem;
+                //生成货品的笛卡尔积
+                specMaxData = descartes(specValueData, specData);
+                //货号处理
+                var productJson = {};
+                productJson['sn'] = productNu;
+                var productList = [];
+                for (var i = 0; i < specMaxData.length; i++) {
+                    var productItem = {};
+                    productItem['specs'] = specMaxData[i];
+                    for (var index in productJson) {
+                        //自动组建货品
+                        if (index == 'sn') {
+                            //值为空时设置默认货号
+                            if (productJson[index] == undefined) {
+                                productJson[index] = productNo;
+                            }
+                            if (productJson[index].match(/(?:\-\d*)$/) == null) {
+                                //正常货号生成
+                                productItem['sn'] = productJson[index] + '-' + (i + 1);
+                            } else {
+                                //货号已经存在则替换
+                                productItem['sn'] = productJson[index].replace(/(?:\-\d*)$/, '-' + (i + 1));
+                            }
+                        } else {
+                            productItem[index] = productJson[index];
+                        }
+                    }
+                    productList.push(productItem);
+                }
+                //属性
+                var selectArr = [];
+                $.each(productList, function (i, item) {
+                    var spec = spec_string = specJson = '';
+                    for (var j = 0; j < (item.specs.length); j++) {
+                        spec_string += item.specs[j].name + ':' + item.specs[j].value + ' ';
+                        spec_md5 = $.md5(spec_string);
+                    }
+                    //productList[i]['spec'] = item.spec_array;
+                    productList[i]['spec'] = spec_string;
+                    productList[i]['spec_md5'] = spec_md5;
+                    productList[i]['spec_query'] = JSON.stringify(item.specs);
+                    selectArr.push(spec_md5);
+                })
+                vm.sku_list=productList;
+                layer.closeAll();
+
+            }
+        })
+
+    })
+
+
+    //标签
+    $('body').on('click','[data-column="status_ext"] .label',function(){
+        /*
+        if($(this).hasClass('badge-primary')){
+            $(this).removeClass('badge-primary');
+        }else{
+            $(this).addClass('badge-primary');
+        }
+        */
+        $(this).addClass('badge-primary').siblings().removeClass('badge-primary');
+        $(this).parent().find('input').val($(this).attr('data-value'));
+
+    })
+
+
+    $('body').on('click',"[data-model='spec_delete']", function () {
+        if (confirm("您确定执行此操作？")){
+            $(this).parents('tr').remove();
+        }
+    })
+
+
+})
+
+
+</script>
+{/block}
+{block name="body"}
+
+<div class="main-content">
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs" >
+                        <li class="active"><a data-toggle="tab" href="#tag1">基本信息</a></li>
+                        
+                        <li><a data-toggle="tab" href="#tag3">商品图册</a></li>
+                        <li><a data-toggle="tab" href="#tag4" style="display: none;">商品类型</a></li>
+                        <li><a data-toggle="tab" href="#tag5">商品内容</a></li>
+                    </ul>
+
+                    <form class="form-horizontal" action="{:url('add')}" role="form" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="cid" value="{$category.id}">
+                        <div class="tab-content">
+
+                            <div id="tag1" class="tab-pane active">
+                                {include file="admin:goods_base" /}
+                            </div>
+                           
+
+                            <div id="tag3" class="tab-pane ">
+                                {include file="admin:goods_imgs" /}
+                            </div>
+
+                            <div id="tag4" class="tab-pane" style="display: none;">
+                                {include file="admin:goods_type" /}
+                            </div>
+
+                            <div id="tag5" class="tab-pane">
+                                {include file="admin:goods_content" /}
+                            </div>
+
+
+                        </div>
+
+                        <div class="clearfix form-actions">
+                            <div class="col-md-offset-3 col-md-10">
+                                <button type="submit" class="btn btn-info glyphicon glyphicon-ok" style="border-radius: 6px;" id="submit">
+                                    <i class="icon-ok bigger-110"></i>保存
+                        </button>
+                        <button class="btn glyphicon glyphicon-repeat" type="reset" style="border-radius: 6px;">
+                            <i class="icon-undo"></i>
+                                     重置
+                        </button>
+                             </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}

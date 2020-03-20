@@ -1,0 +1,147 @@
+{extend name="public/book_base" /}
+{block name="body"}
+<div class="main-content">
+
+<div class="main-content-inner">
+
+<div class="page-content">
+
+<div class="row">
+<div class="tabbable">
+ 	<ul class="nav nav-tabs" >
+    	<li role="presentation" class="active"><a data-toggle="tab" href="#tag1">基本信息</a></li>
+</ul></br></br>
+		<form class="form-horizontal" action="{:url('add')}" method="post">
+			<div class="form-group">
+		    <label for="parent_name" class="col-sm-3 control-label">上级分类</label>
+		    <div class="col-sm-5">
+		      <select class="form-control" name="path_id">
+
+		      <option value="{$info.path_id}">{$info.path}>{$info.name}</option>
+		      
+		      </select>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="name" class="col-sm-3 control-label">分类名称</label>
+		    <div class="col-sm-5">
+		      <input type="text" class="form-control" name="name" id="name"  placeholder="分类名称" >
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="type_id" class="col-sm-3 control-label">关联类型</label>
+		    <div class="col-sm-5">
+		      <input type="text" class="form-control" name="type_id" id="type_id" placeholder="每个分类可以管理一个商品类型，用于前台筛选及商品类型添加">
+		    </div>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="img" class="col-sm-3 control-label">栏目图片</label>
+		    <div class="col-sm-5">
+		      <input type="file"  name="img" id="img" placeholder="栏目图片">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="url" class="col-sm-3 control-label">栏目链接</label>
+		    <div class="col-sm-5">
+		      <input type="text" class="form-control" name="url" id="url" placeholder="设置后点击栏目跳转到指定链接">
+		    </div>
+		  </div>	
+		  <div class="form-group">
+		  <label for="grade" class="col-sm-3 control-label">价格分级</label>
+		  <div class="col-sm-5">
+		  <textarea id="editor"  class="form-control" placeholder="填写分类下商品筛选价格分级，如：0-99，每行一个" id="descript" name="grade" style="min-height: 130px;width: 100%;">填写分类下商品筛选价格分级，如：0-99，每行一个
+          </textarea>
+      	  </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="keywords" class="col-sm-3 control-label">分类关键词</label>
+		    <div class="col-sm-5">
+		      <input type="text" class="form-control" name="keywords" id="keywords" placeholder="多个关键字请用分隔符分隔">
+		    </div>
+		  </div>		  
+		  <div class="form-group">
+		  <label for="descript" class="col-sm-3 control-label">分类描述</label>
+		  <div class="col-sm-5">
+		  <textarea id="editor"  class="form-control" placeholder="建议不超过80个字" id="descript" name="descript" style="min-height: 130px;width: 100%;">建议不超过80个字
+          </textarea>
+      	  </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="sort" class="col-sm-3 control-label">排序</label>
+		    <div class="col-sm-5">
+		      <input type="text" class="form-control" name="sort" id="sort" placeholder="请填写自然数，文字分类列表将会根据排序进行由小到大排列显示">
+		    </div>
+		  </div>
+		  	<div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2">
+	  			<label class="col-sm-4 control-label">导航显示</label>   
+			      <div style="position: absolute;left: 120px;">
+			      <label class="radio-inline">
+			        <input type="radio" name="show_in_nav"  value="1"> 允许
+			      </label>
+			      <label class="radio-inline">
+			        <input type="radio" name="show_in_nav"  value="0"> 
+			        <span>禁止</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+			<div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2">
+	  			<label for="inputEmail3" class="col-sm-4 control-label">楼层显示</label>   
+			      <div style="position: absolute;left: 120px;">
+			      <label class="radio-inline">
+			        <input type="radio" name="is_floor"  value="1"> 允许
+			      </label>
+			      <label class="radio-inline">
+			        <input type="radio" name="is_floor"  value="0"> 
+			        <span>禁止</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+			<div class="form-group">
+		  		<div class="col-sm-3 col-md-offset-2">
+	  			<label for="inputEmail3" class="col-sm-4 control-label">启用分类</label>   
+			      <div style="position: absolute;left: 120px;">
+			      <label class="radio-inline">
+			        <input type="radio" name="status"  value="1"> 允许
+			      </label>
+			      <label class="radio-inline">
+			        <input type="radio" name="status"  value="0"> 
+			        <span>禁止</span>
+			      </label>
+			      </div>
+		  	</div>
+			</div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-10">
+					<button type="submit" class="btn btn-info glyphicon glyphicon-ok" style="border-radius: 6px;">
+					<i class="icon-ok bigger-110"></i>保存
+					</button>
+				<button class="btn glyphicon glyphicon-repeat" type="reset" style="border-radius: 6px;">
+					<i class="icon-undo"></i>
+					重置
+				</button>
+			</div>
+		</div>
+	</form>
+       
+
+
+        <form class="form-horizontal">
+
+    </div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+{/block}
+ 

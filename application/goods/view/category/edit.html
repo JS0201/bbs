@@ -12,11 +12,19 @@
     	<li role="presentation" class="active"><a data-toggle="tab" href="#tag1">基本信息</a></li>
 </ul></br></br>
 
-		<form class="form-horizontal" action="{:url('add')}" method="post">
+		<form class="form-horizontal" action="{:url('edit')}" method="post">
+			<input type="hidden" name="path" value="{$info['parent_name']}">
+			<input type="hidden" name="id" value="{$info['parent_id']}">
+			<div class="form-group">
+		    <label for="" class="col-sm-3 control-label">上级分类</label>
+		    <div class="col-sm-5">
+	      <input type="text" class="form-control" name="" id=""  placeholder="{$info.parent_name}" readonly>
+		    </div>
+		  </div>
 		  <div class="form-group">
 		    <label for="name" class="col-sm-3 control-label">分类名称</label>
 		    <div class="col-sm-5">
-		      <input type="text" class="form-control" name="name" id="name"  placeholder="分类名称">
+		      <input type="text" class="form-control" name="name" id="name"  placeholder="分类名称" >
 		    </div>
 		  </div>
 		  <div class="form-group">
@@ -133,5 +141,6 @@
 </div>
 
 </div>
+
 {/block}
  

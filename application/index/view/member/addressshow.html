@@ -1,0 +1,37 @@
+{extend name="public:lore" /}
+
+{block name="body"}
+{foreach name="list" item="lists"}
+<div class="col-sm-10 col-sm-offset-1">
+<div class="panel panel-default">
+  	<div class="panel-body" style="position: relative;height: 137px;">
+  		<div class="pbody" style="height: 50px;">
+			{$lists.name}
+			<font style="position: relative;float: right;">{$lists.mobile}</font>
+			<font style="position: absolute;top: 50px;left: 15px;">{$lists.local}</font>
+  		</div>
+  		<hr>
+  		<input class="def" id="def" type="checkbox" aid="{$lists.id}" onclick="ischeck(this)" name="like" style="position: absolute;
+    		top: 100px;width: 20px;height: 20px;" {eq name="$lists.isdefault" value="1"} checked="" value="1" {/eq} {eq name="$lists.isdefault" value="0"}value="0"{/eq}><label style="position: absolute;left: 40px;font-size: 13px;font-weight:normal;">默认地址</label>
+  		<div class="but" style="position: relative;float: right;top:-8px;">
+  			<button type="button" class="btn btn-info" style="height: 30px">编辑</button>
+  			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  			<button type="button" class="btn btn-info" style="height: 30px">删除</button>
+  		</div>
+  	</div>
+  </div>
+</div>
+{/foreach}
+<a href="/index/member/addaddress"><button type="button" class="btn btn-info col-sm-2 col-sm-offset-1" style="position: relative; height: 40px;width: 150px; left: 15px;">新增</button></a>
+<script type="text/javascript">
+  function ischeck(obj)
+        {
+            var ischeck = $(obj).val();
+            var aid = obj.getAttribute('aid');
+            $.post('/index/member/addressShow',{aid : aid, ischeck : ischeck},function(data){
+              console.log(data.message);
+            },'json');
+}
+
+</script>
+{/block}

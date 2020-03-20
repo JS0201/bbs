@@ -1,0 +1,163 @@
+{extend name="public:base" /}
+{block name="script"}
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
+{/block}
+{block name="css"}
+<style>
+	.boy{
+		background: #F5F5F5;
+		height: 900px;
+	}
+	.bo{
+		position: relative;
+		margin:0px 0px 20px 0px;
+		padding: 10px 10px 0px 0px;
+	}
+	#avatar_img{
+		width: 141px;
+		height: 141px;
+		left:0;
+		top: 0;
+		border-radius: 1%;
+	}
+
+	.pan{
+		position: relative;
+		top:-13px;
+	}
+	.pri {
+		position: absolute;
+		top: 100px;
+		left: 180px;
+		font-size: 16px;
+	}
+	.pric{
+		position:absolute;
+		top: 100px;
+		left: 220px;
+		font-size: 16px;
+		color: #f9488e;
+	}
+	#name{
+		position:absolute;
+		left: 180px;
+	}
+	#sum {
+		position: absolute;
+		top: 100px;
+	}
+	.express{
+		position: absolute;
+		right: 30px;
+		color: #f9488e;
+
+	}
+
+	.mon{
+		position: absolute;
+		right: 75px;
+		font-size: 16px;
+	}
+	.money{
+		position: absolute;
+		right: 30px;
+		color: #f9488e;
+		font-size: 16px;
+	}
+	#submit{
+		position: relative;
+		left: 78%;
+		height: 40px;
+		width: 100px;
+	}
+
+</style>
+{/block}
+{block name="body"}
+<div>
+<div class="row">
+	<div class="col-sm-12">
+		<a href="/index/member/addressshow" style="text-decoration:none;color: black">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="pbody" style="height: 50px;">
+					<input type="hidden" id="address" value="{$address.id}">
+					<label>{$address.name}</label>
+					<label style="position: relative;float: right;">{$address.mobile}</label><br><br>
+					{$address.local}
+				</div>
+			</div>
+		</div>
+		</a>
+	</div>
+</div>
+<div class="panel panel-default pan">
+	<div class="panel-body" style="position: relative;">
+		{volist name="list" id="list"}
+		<div class="row bo" name="name" data-sum = "{$list.sum}"  data-thumb="{$list.thumb}" data-spuid="{$list.spu_id}" data-cartid="{$list.cart_id}">
+			<div class="col-sm-12">
+				<div class="col-sm-11">
+					<img src="\uploads\{$list.thumb}"  id="avatar_img"/>
+					<label id="name">{$list.name}</label>
+					<span class="pri">价格：</span><span class="pric">￥{$list.price}</span>
+				</div>
+				<div class="col-sm-1">
+					<span id="sum">x{$list.sum}</span>
+				</div>
+			</div>
+		</div>
+		{/volist}
+		<div class="row">
+			<div class="col-sm-12">
+				留言
+				<textarea class="form-control" name="" placeholder="限100字以内" style="min-height: 60px;" id="textarea"></textarea>
+				<span>运费</span>
+				<span class="express">￥{$list.express}</span><br><br>
+				<span class="mon">实付金额：</span>
+				<span class="money">￥{$list.money}</span><br><br>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clearfix form-actions">
+	<div class="col-md-offset-3 col-md-10" id="sub">
+		<button type="submit" class="btn btn-danger" onclick="confirm()" id="submit">
+			<i class="icon-ok bigger-110"></i>确认订单
+		</button>
+</div>
+</div>
+</div>
+<script>
+     function confirm() {
+        var isbuy = 0;
+        var remark = $('#textarea').val();
+        var params = {};
+        var div = $("div[name='name']");
+        div.each(function(k, v) {
+            var spuid = $(v).attr('data-spuid');
+            var sum = $(v).attr('data-sum');
+            var thumb = $(v).attr('data-thumb');
+            var cartid = $(v).attr('data-cartid');
+            params[k] = {"spu_id" : spuid, "sum" : sum,"thumb" : thumb,"cart_id":cartid};
+        })
+        var addressid = $('#address').val();
+        $.ajax({
+            type: "post",
+            url: "/order/order/create",
+            data: { params : params, remark: remark,addressid: addressid, isbuy: isbuy},
+            dataType: "json",
+            success: function(data){
+                switch(data.status) {
+                 case 0:
+                 alert(data.message);
+                    break;
+                 case 1:
+                 alert(data.message);
+                    window.location.href="/goods/index/index";
+                    break;
+            }  
+                        }
+                    });
+    }
+</script>
+{/block}
